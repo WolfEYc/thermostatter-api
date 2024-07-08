@@ -57,7 +57,15 @@ jobs:
       
       - name: Send Deploy Webhook to Keel
         uses: fjogeleit/http-request-action@v1
+        id: keel_req
         with:
           url: 'https://keel.wofleydev.com/v1/webhooks/native'
           method: 'POST'
           data: '{"name": ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}, "key_2": ${{ steps.read_toml.outputs.value }}}'
+      
+      - name: Show Response
+        run: |
+          echo ${{ steps.keel_req.outputs.response }}
+          echo ${{ steps.keel_req.outputs.headers }}
+          echo ${{ steps.keel_req.outputs.status }}
+          echo ${{ fromJson(steps.keel_req.outputs.response) }}
