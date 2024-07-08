@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+import thermostatter_api
+
+app = FastAPI(version=thermostatter_api.version)
 
 
 @app.get("/hello-world")
