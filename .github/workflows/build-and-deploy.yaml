@@ -69,13 +69,17 @@ jobs:
           file: 'pyproject.toml'
           field: 'tool.poetry.version'
       
+      - name: downcase REPO
+        run: |
+          echo "REPO=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
+      
       - name: Send Deploy Webhook to Keel
         uses: fjogeleit/http-request-action@v1
         id: keel_req
         with:
           url: 'https://keel.wolfeydev.com/v1/webhooks/native'
           method: 'POST'
-          data: '{"name": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}", "tag": "${{ steps.read_toml.outputs.value }}"}'
+          data: '{"name": "${{ env.REGISTRY }}/${{ env.REPO }}", "tag": "${{ steps.read_toml.outputs.value }}"}'
       
       - name: Show Response
         run: |
