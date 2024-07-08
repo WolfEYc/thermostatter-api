@@ -9,6 +9,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .
+      
       - name: Check pypi versions
         uses: maybe-hello-world/pyproject-check-version@v4
         id: versioncheck
