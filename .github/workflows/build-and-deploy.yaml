@@ -13,11 +13,11 @@ jobs:
         with:
           sparse-checkout: .
       
-      - name: Check pypi versions
-        uses: mpm-tu-berlin/pyproject-check-version-poetry@v2
-        id: versioncheck
+      - uses: SebRollen/toml-action@v1.2.0
+        id: read_toml
         with:
-          pyproject-path: "./pyproject.toml"    # default value
+          file: 'pyproject.toml'
+          field: 'tool.poetry.version'
 
       - name: Docker meta
         id: meta
@@ -29,7 +29,7 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             latest
-            ${{ steps.versioncheck.outputs.local_version }}
+            ${{ steps.read_toml.outputs.value }}
             type=sha
       
       - name: Login to GitHub Container Registry
