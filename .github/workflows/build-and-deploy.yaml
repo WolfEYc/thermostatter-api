@@ -61,7 +61,7 @@ jobs:
         with:
           url: 'https://keel.wolfeydev.com/v1/webhooks/native'
           method: 'POST'
-          data: '{"name": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}", "key_2": "${{ steps.read_toml.outputs.value }}"}'
+          data: '{"name": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}", "tag": "${{ steps.read_toml.outputs.value }}"}'
       
       - name: Show Response
         run: |
