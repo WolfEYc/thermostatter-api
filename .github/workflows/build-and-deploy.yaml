@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -54,6 +54,20 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .
+      
+      - name: Read Version from pyproject.toml
+        uses: SebRollen/toml-action@v1.2.0
+        id: read_toml
+        with:
+          file: 'pyproject.toml'
+          field: 'tool.poetry.version'
       
       - name: Send Deploy Webhook to Keel
         uses: fjogeleit/http-request-action@v1
