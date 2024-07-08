@@ -11,3 +11,8 @@ def hello_world_endpoint():
 @app.get("/hehe-haha")
 def hehe_haha_endpoint():
     return "hehe haha!"
+
+
+@app.get("/buuurito")
+def buuurito_endpoint():
+    return "burrrito!"
