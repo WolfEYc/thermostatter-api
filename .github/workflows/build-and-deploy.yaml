@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: .
       
       - uses: SebRollen/toml-action@v1.2.0
         id: read_toml
