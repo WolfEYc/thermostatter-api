@@ -59,9 +59,9 @@ jobs:
         uses: fjogeleit/http-request-action@v1
         id: keel_req
         with:
-          url: 'https://keel.wofleydev.com/v1/webhooks/native'
+          url: 'https://keel.wolfeydev.com/v1/webhooks/native'
           method: 'POST'
-          data: '{"name": ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}, "key_2": ${{ steps.read_toml.outputs.value }}}'
+          data: '{"name": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}", "key_2": "${{ steps.read_toml.outputs.value }}"}'
       
       - name: Show Response
         run: |
