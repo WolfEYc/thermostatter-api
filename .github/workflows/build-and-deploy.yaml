@@ -54,3 +54,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Send Deploy Webhook to Keel
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://keel.wofleydev.com/v1/webhooks/native'
+          method: 'POST'
+          data: '{"name": ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}, "key_2": ${{ steps.read_toml.outputs.value }}}'
