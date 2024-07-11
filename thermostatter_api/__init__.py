@@ -1,10 +1,13 @@
 import importlib.metadata
 
 import uvicorn
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PKG_METADATA = importlib.metadata.metadata("thermostatter-api")
 author = PKG_METADATA["Author"]
-project = PKG_METADATA["Name"]
+PROJECT_NAME = PKG_METADATA["Name"]
 version = PKG_METADATA["Version"]
 
 
