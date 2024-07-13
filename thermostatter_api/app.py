@@ -23,7 +23,7 @@ def hello_world_endpoint():
     return "Hello, World!"
 
 
-@app.get("/big-burrito")
-def big_burrito_endpoint():
-    LOGGER.info("big-burrito")
-    return "big burrito!"
+@app.get("/ping")
+def big_burrito_endpoint(msg: str):
+    LOGGER.info(f"echo: {msg}")
+    return "pong"
