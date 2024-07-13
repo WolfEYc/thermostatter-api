@@ -39,7 +39,9 @@ LOGGER.addHandler(logger_handler)
 
 
 def setup_telemetry(app: FastAPI):
-    FastAPIInstrumentor.instrument_app(app)
+    FastAPIInstrumentor.instrument_app(
+        app, tracer_provider=trace_provider, meter_provider=meter_provider
+    )
 
 
 def shutdown_telemetry():
