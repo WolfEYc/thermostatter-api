@@ -5,21 +5,24 @@ from opentelemetry import _logs, metrics, trace
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.asyncpg import AsyncPGInstrumentor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from opentelemetry.sdk.resources import DEPLOYMENT_ENVIRONMENT, SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import ConcurrentMultiSpanProcessor, TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from thermostatter_api import PROJECT_NAME
+from thermostatter_api import APP_ENV, PROJECT_NAME
 from thermostatter_api.logger import LOGGER
 
 # Service name is required for most backends
-resource = Resource(attributes={SERVICE_NAME: PROJECT_NAME})
+resource = Resource(
+    attributes={SERVICE_NAME: PROJECT_NAME, DEPLOYMENT_ENVIRONMENT: APP_ENV}
+)
 
 trace_provider = TracerProvider(
     resource=resource, active_span_processor=ConcurrentMultiSpanProcessor()
@@ -57,6 +60,7 @@ def setup_telemetry(app: FastAPI):
     FastAPIInstrumentor.instrument_app(
         app, tracer_provider=trace_provider, meter_provider=meter_provider
     )
+    AsyncPGInstrumentor().instrument()
 
 
 def shutdown_telemetry():
