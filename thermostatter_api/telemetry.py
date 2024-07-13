@@ -13,6 +13,7 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import ConcurrentMultiSpanProcessor, TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from thermostatter_api import PROJECT_NAME
 from thermostatter_api.logger import LOGGER
@@ -38,7 +39,21 @@ logger_handler = LoggingHandler(logger_provider=logger_provider, level=logging.I
 LOGGER.addHandler(logger_handler)
 
 
+def get_current_trace_id():
+    trace_id = trace.get_current_span().get_span_context().trace_id
+    return trace.format_trace_id(trace_id)
+
+
+class TraceIDMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        trace_id = get_current_trace_id()
+        response = await call_next(request)
+        response.headers["x-trace-id"] = trace_id
+        return response
+
+
 def setup_telemetry(app: FastAPI):
+    app.add_middleware(TraceIDMiddleware)
     FastAPIInstrumentor.instrument_app(
         app, tracer_provider=trace_provider, meter_provider=meter_provider
     )
