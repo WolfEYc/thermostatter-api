@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thermostatter-api"
-version = "0.1.10"
+version = "0.1.11"
 description = "thermostatter HTTP JSON API"
 authors = ["WolfEYc <wolfeycode@gmail.com>"]
 readme = "README.md"
@@ -15,7 +15,7 @@ opentelemetry-exporter-otlp-proto-http = "^1.25.0"
 opentelemetry-instrumentation-fastapi = "^0.46b0"
 colorlog = "^6.8.2"
 python-dotenv = "^1.0.1"
-async-db-polars = {version = "^0.1.7", extras = ["pg"]}
+async-db-polars = { version = "^0.1.7", extras = ["pg"] }
 opentelemetry-instrumentation-asyncpg = "^0.46b0"
 
 
