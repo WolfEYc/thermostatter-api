@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
 
 import thermostatter_api
-from thermostatter_api import telemetry
+from thermostatter_api import auth, telemetry
 from thermostatter_api.logger import LOGGER
 from thermostatter_api.pg import PG
 
@@ -33,3 +33,6 @@ async def db_test_endpoint():
 def big_burrito_endpoint(msg: str):
     LOGGER.info(f"echo: {msg}")
     return "pong"
+
+
+app.include_router(auth.router)
