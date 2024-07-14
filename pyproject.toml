@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thermostatter-api"
-version = "0.2.0"
+version = "0.2.1"
 description = "thermostatter HTTP JSON API"
 authors = ["WolfEYc <wolfeycode@gmail.com>"]
 readme = "README.md"
