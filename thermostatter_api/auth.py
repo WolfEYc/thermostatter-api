@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime, timedelta
 from typing import Annotated, Optional
 
@@ -152,8 +153,45 @@ FAILED_TO_REGISTER_EXCEPTION = HTTPException(
     "User registration failed, likely an account with this username or email is already taken",
 )
 
+email_regex = re.compile(r"/^[^\.\s][\w\-\.{2,}]+@([\w-]+\.)+[\w-]{2,}$/")
+
+USERNAME_MIN = 2
+USERNAME_MAX = 30
+
+PASSWORD_MIN = 8
+PASSWORD_MAX = 16
+
+
+def validate_email(email: str):
+    if email_regex.match(email) is not None:
+        return
+    raise HTTPException(400, "invalid email format")
+
+
+def validate_username(username: str):
+    str_len = len(username)
+    if str_len < USERNAME_MIN:
+        raise HTTPException(400, "username is too short")
+    if str_len > USERNAME_MAX:
+        raise HTTPException(400, "username is too long")
+
+
+def validate_password(password: str):
+    str_len = len(password)
+    if str_len < PASSWORD_MIN:
+        raise HTTPException(400, "password is too short")
+    if str_len > PASSWORD_MAX:
+        raise HTTPException(400, "password is too long")
+
+
+def validate_registration(req: CreateUserReq):
+    validate_email(req.email)
+    validate_username(req.username)
+    validate_password(req.password)
+
 
 async def register(req: CreateUserReq) -> Token:
+    validate_registration(req)
     hashed_password = hash_password(req.password)
     insert_row = {
         "hashed_password": hashed_password,

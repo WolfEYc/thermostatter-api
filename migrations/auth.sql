@@ -1,3 +1,4 @@
+-- Active: 1720577098991@@postgres.wolfeydev.com@5432@thermostatter
 CREATE SCHEMA auth;
 
 DROP TABLE auth.users;
